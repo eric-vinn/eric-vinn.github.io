@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate x, y, or % Reduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input {
+            margin: 5px 0;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Calculate x, y, or % Reduction</h2>
+    
+    <label for="xInput">Enter the value of x (after reduction):</label>
+    <input type="number" id="xInput" placeholder="Enter x value"><br>
+
+    <label for="yInput">Enter the value of y (original value):</label>
+    <input type="number" id="yInput" placeholder="Enter y value"><br>
+
+    <label for="percentInput">Enter the % reduction:</label>
+    <input type="number" id="percentInput" placeholder="Enter % reduction"><br>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculate() {
+            const x = parseFloat(document.getElementById('xInput').value);
+            const y = parseFloat(document.getElementById('yInput').value);
+            const percent = parseFloat(document.getElementById('percentInput').value);
+
+            // Check how many fields are filled
+            const filled = [!isNaN(x), !isNaN(y), !isNaN(percent)].filter(Boolean).length;
+            
+            if (filled < 2) {
+                document.getElementById('result').textContent = "Please fill at least two fields.";
+                return;
+            }
+
+            // Calculate missing value based on what's filled
+            let result = "";
+            if (isNaN(x)) {
+                // Calculate x from y and percent
+                const reductionFactor = 1 - percent / 100;
+                const calculatedX = y * reductionFactor;
+                result = `For y = ${y} and % reduction = ${percent}, x = ${calculatedX.toFixed(2)}`;
+            } else if (isNaN(y)) {
+                // Calculate y from x and percent
+                const reductionFactor = 1 - percent / 100;
+                const calculatedY = x / reductionFactor;
+                result = `For x = ${x} and % reduction = ${percent}, y = ${calculatedY.toFixed(2)}`;
+            } else if (isNaN(percent)) {
+                // Calculate percent from x and y
+                const calculatedPercent = ((y - x) / y) * 100;
+                result = `For x = ${x} and y = ${y}, % reduction = ${calculatedPercent.toFixed(2)}%`;
+            }
+
+            document.getElementById('result').textContent = result;
+        }
+    </script>
+</body>
+</html>
